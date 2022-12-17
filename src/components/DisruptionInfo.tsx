@@ -1,7 +1,17 @@
 import { ApolloError } from '@apollo/client';
+import { Alert } from '../types';
 import './DisruptionInfo.css';
 
-const DisruptionInfo = ({ data, loading, error }: { data: any, loading: boolean, error: ApolloError | undefined}) => {
+interface Props {
+  data: {
+    alerts: Alert[]
+  };
+  loading: boolean;
+  error?: ApolloError;
+}
+
+
+const DisruptionInfo = ({ data, loading, error }: Props) => {
   if(loading){
     return(
       <div>
@@ -20,7 +30,7 @@ const DisruptionInfo = ({ data, loading, error }: { data: any, loading: boolean,
 
   return (
     <div className="DisruptionInfo">
-      {data.alerts.map((alert: any) => (
+      {data.alerts.map((alert: Alert) => (
         <div className="Alert" key={alert.id}> {alert.alertDescriptionText}</div>
       ))}
     </div>

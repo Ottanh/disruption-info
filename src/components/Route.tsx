@@ -1,11 +1,15 @@
 import { Layer, LayerProps, Source } from 'react-map-gl';
+import { LineString } from 'geojson';
+import { LayerStyle } from '../types';
 
+interface Props {
+  line: LineString;
+  layerStyle: LayerStyle
+}
 
-const Route = ({ geojson, layerStyle }: any) => {
-
-  const geojson2 = {...geojson, coordinates: geojson.coordinates.filter((_x: any, i: number) => i % 4)};
+const Route = ({ line, layerStyle }: Props) => {
   return (
-    <Source type="geojson" data={geojson2}>
+    <Source type="geojson" data={line}>
       <Layer  {...layerStyle as LayerProps}/>
     </Source>
   );

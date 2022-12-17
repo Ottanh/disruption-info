@@ -1,4 +1,6 @@
-const getLayerStyle = (id: string, severity: string) => {
+import { LayerStyle, Paint } from '../types';
+
+const getLayerStyle = (id: string, severity: string): LayerStyle => {
   const layerStyle = {
     type: 'line',
     layout: {
@@ -6,11 +8,7 @@ const getLayerStyle = (id: string, severity: string) => {
       'line-cap': 'round'
     },
   };
-  const paint: {
-    'line-width': number;
-    'line-opacity': number;
-    'line-color'?: string;
-  } = {
+  const paint: Paint = {
     'line-width': 4,
     'line-opacity': 0.2
   };
