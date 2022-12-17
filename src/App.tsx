@@ -2,17 +2,17 @@ import './App.css';
 import Map from 'react-map-gl';
 import mapboxgl from 'mapbox-gl';
 import style from './hsl-map-style';
+import DisruptionInfo from './components/DisruptionInfo';
 
 if(process.env.REACT_APP_MAPBOX_TOKEN) {
   mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 }
 
 
-function App() {
-
+const App = () => {
   return (
     <div className="App">
-      hello
+      <DisruptionInfo />
       <Map
         initialViewState={{
           longitude: 24.92399127219203,
@@ -20,10 +20,11 @@ function App() {
           zoom: 9
         }}
         mapStyle={style}
+        style={{'width':'50%'}}
         attributionControl={false}
       />
     </div>
   );
-}
+};
 
 export default App;

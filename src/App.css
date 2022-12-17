@@ -1,5 +1,10 @@
 .App {
   height: 100%;
-  text-align: center;
+  display: flex;
 }
 
+
+.mapboxgl-map {
+  overflow: hidden;
+  box-sizing: border-box;
+}
