@@ -1,11 +1,12 @@
-import { generateStyle } from "hsl-map-style";
+import { generateStyle } from 'hsl-map-style';
 
 const style = generateStyle({
   sourcesUrl: 'https://cdn.digitransit.fi/', // <-- You can override the default sources URL. The default is https://api.digitransit.fi/
   queryParams: [ // It's possible to add query parameters to urls, for example apikeys.
     {
-      url: "https://cdn.digitransit.fi/", // Url pattern where the parameter should be added
-      name: "digitransit-subscription-key",
+      url: 'https://cdn.digitransit.fi/', // Url pattern where the parameter should be added
+      name: 'digitransit-subscription-key',
+      // eslint-disable-next-line no-undef
       value: process.env.DIGITRANSIT_KEY,
       // --> &digitransit-subscription-key=my-secret-key
     },
@@ -40,7 +41,7 @@ const style = generateStyle({
     print: { enabled: false },
     greyscale: { enabled: false },
     simplified: { enabled: false },
-    "3d": { enabled: false },
+    '3d': { enabled: false },
     driver_info: { enabled: false },
   },
 

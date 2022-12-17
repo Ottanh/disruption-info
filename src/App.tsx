@@ -1,7 +1,7 @@
 import './App.css';
 import Map from 'react-map-gl';
 import mapboxgl from 'mapbox-gl';
-import style from './hsl-map-style'
+import style from './hsl-map-style';
 
 if(process.env.REACT_APP_MAPBOX_TOKEN) {
   mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
