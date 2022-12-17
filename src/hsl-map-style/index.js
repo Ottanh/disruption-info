@@ -39,7 +39,7 @@ const style = generateStyle({
     regular_stops: { enabled: false },
     near_bus_stops: { enabled: false },
     print: { enabled: false },
-    greyscale: { enabled: false },
+    greyscale: { enabled: true },
     simplified: { enabled: false },
     '3d': { enabled: false },
     driver_info: { enabled: false },

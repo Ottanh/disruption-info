@@ -1,34 +1,7 @@
-import { gql, useQuery } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
 import './DisruptionInfo.css';
 
-const GET_DISRUPTIONS = gql`
-  query {
-    alerts {
-      id
-      alertDescriptionText
-      route {
-        patterns {
-          patternGeometry {
-            points
-            length
-          }
-        }
-        longName
-      }
-      trip {
-        shapeId
-      }
-      stop {
-        lat
-        lon
-      }
-    }
-  }
-`;
-
-const DisruptionInfo = () => {
-  const { data, loading, error} = useQuery(GET_DISRUPTIONS);
-
+const DisruptionInfo = ({ data, loading, error }: { data: any, loading: boolean, error: ApolloError | undefined}) => {
   if(loading){
     return(
       <div>
@@ -44,9 +17,6 @@ const DisruptionInfo = () => {
       </div>
     );
   }
-
-  console.log(data.alerts);
-
 
   return (
     <div className="DisruptionInfo">
