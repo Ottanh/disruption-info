@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import polyline from '@mapbox/polyline';
 import Route from './Route';
 import sortBySeverity from '../utils/sortBySeverity';
+import getLayerStyle from '../utils/getLayerStyle';
 
 if(process.env.REACT_APP_MAPBOX_TOKEN) {
   mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
@@ -30,21 +31,6 @@ const DisruptionMap = ({ data }: { data: any}) => {
   }, [data]);
 
 
-  const layerStyle = {
-    type: 'line',
-    layout: {
-      'line-join': 'round',
-      'line-cap': 'round'
-    },
-    paint: {
-      'line-color': '#888',
-      'line-width': 8
-    }
-  };
-
-  console.log(routeDisruptions);
-
-
   return (
     <Map
       initialViewState={{
@@ -60,21 +46,9 @@ const DisruptionMap = ({ data }: { data: any}) => {
       {routeDisruptions.length > 0 && 
         routeDisruptions.map((disruption: { line: any[]; id: string; severity: string })  => {
 
-          const paint: any = {
-            'line-width': 4,
-            'line-opacity': 0.2
-          };
-          if(disruption.severity === 'INFO'){
-            paint['line-color'] = '#229fff';
-          } else if(disruption.severity === 'WARNING'){
-            paint['line-color'] = '#FFFF6E';
-          } else {
-            paint['line-color'] = '#FF6775';
-          }
-
           return disruption.line.map((line: any, index: any) => {
-            const style = {...layerStyle, id: disruption.id + index, paint};
-            return <Route key={index} layerStyle={style} geojson={line} />;
+            const layerStyle = getLayerStyle(disruption.id + index, disruption.severity);
+            return <Route key={index} layerStyle={layerStyle} geojson={line} />;
           });
         })
       }
