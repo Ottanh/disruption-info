@@ -27,12 +27,20 @@ const DisruptionInfo = ({ data, loading, error }: Props) => {
       </div>
     );
   }
-
+  
   return (
     <div className="DisruptionInfo">
-      {data.alerts.map((alert: Alert) => (
-        <div className="Alert" key={alert.id}> {alert.alertDescriptionText}</div>
-      ))}
+      {data.alerts.map((alert: Alert) => {
+        let alerType;
+        if(alert.alertSeverityLevel === 'INFO'){
+          alerType = 'Alert-info';
+        } else if(alert.alertSeverityLevel === 'WARNING'){
+          alerType = 'Alert-warning';
+        } else {
+          alerType = 'Alert-severe';
+        }
+        return <div className={alerType} key={alert.id} > {alert.alertDescriptionText}</div>;
+      })}
     </div>
   );
   
