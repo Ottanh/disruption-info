@@ -1,0 +1,4 @@
+.mapboxgl-map {
+  overflow: hidden;
+  box-sizing: border-box;
+}
