@@ -2,3 +2,9 @@
   height: 100%;
   display: flex;
 }
+
+.Info-container {
+  width: 50%;
+  overflow: auto;
+}
+

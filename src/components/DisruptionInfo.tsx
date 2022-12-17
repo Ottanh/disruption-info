@@ -10,7 +10,6 @@ interface Props {
   error?: ApolloError;
 }
 
-
 const DisruptionInfo = ({ data, loading, error }: Props) => {
   if(loading){
     return(
