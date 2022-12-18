@@ -3,13 +3,12 @@ import { State } from './state';
 export type Action =
   | {
       type: 'SET_FILTER';
-      payload: string | null;
+      payload: string[];
     }
   | {
       type: 'SET_STATE';
       payload: State;
     }
-
 
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -25,8 +24,7 @@ export const reducer = (state: State, action: Action): State => {
   }
 };
 
-
-export const setUser = (payload: string): Action => {
+export const setFilter = (payload: string[]): Action => {
   return {
     type: 'SET_FILTER',
     payload

@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-const sortBySeverity = (a: { severity: string; }, b: { severity: string; }) => {
-    if(a.severity === 'INFO' && b.severity === 'WARNING' || a.severity === 'WARNING' && b.severity === 'SEVERE' ){
-      return -1;
-    }
-    if(b.severity === 'INFO' && a.severity === 'WARNING' || b.severity === 'WARNING' && a.severity === 'SEVERE' ){
-      return 1;
-    }
-    return 0;
+const sortBySeverity = (a: any, b: any ) => {
+  if(a.properties.severity === 'INFO' && b.properties.severity === 'WARNING' || a.properties.severity === 'WARNING' && b.properties.severity === 'SEVERE' ){
+    return -1;
+  }
+  if(b.properties.severity === 'INFO' && a.properties.severity === 'WARNING' || b.properties.severity === 'WARNING' && a.properties.severity === 'SEVERE' ){
+    return 1;
+  }
+  return 0;
 };
 
 

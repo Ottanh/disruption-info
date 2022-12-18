@@ -1,14 +1,14 @@
-import Map from 'react-map-gl';
-import mapboxgl from 'mapbox-gl';
+import Map, { Layer, LayerProps, Source } from 'react-map-gl';
+import mapboxgl, { MapboxEvent, Map as MapType, MapboxGeoJSONFeature } from 'mapbox-gl';
 import style from '../hsl-map-style';
 import './DisruptionMap.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import polyline from '@mapbox/polyline';
-import Route from './Route';
 import sortBySeverity from '../utils/sortBySeverity';
 import getRouteStyle from '../utils/getRouteStyle';
-import { Alert, RouteDisruption } from '../types';
-import { MultiLineString, Feature } from 'geojson';
+import { Alert } from '../types';
+import { MultiLineString, Feature, FeatureCollection } from 'geojson';
+import { useStateValue } from '../state';
 
 if(process.env.REACT_APP_MAPBOX_TOKEN) {
   mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
@@ -21,11 +21,56 @@ interface Props {
 }
 
 const DisruptionMap = ({ data }:  Props) => {
-  const [routeDisruptions, setRouteDisruptions] = useState<RouteDisruption[]>([]);
+  const [featureCollection, setFeatureCollection] = useState<FeatureCollection>();
+  const mapRef = useRef<MapType>();
+  const [, setForceRerender] = useState(0);
+
+  const [hoveredRouteIds, setHoveredRouteIds] = useState<string[]>([]);
+  const [{ filter }, dispatch] = useStateValue();
+
+  useEffect(() => {
+    if(mapRef.current){
+      mapRef.current.on('mouseenter', 'routes', function(e) {
+
+        e.features?.forEach((feature: MapboxGeoJSONFeature) => {
+          if(feature.id && !hoveredRouteIds.includes(feature.id.toString())){
+            setHoveredRouteIds(hoveredRouteIds.concat(feature.id.toString()));
+          }
+          if(mapRef.current){
+            mapRef.current.setFeatureState(
+              feature,
+              { hover: true }
+            );
+          }
+        });
+      });
+      
+      mapRef.current.on('mouseleave', 'routes', function() {
+        console.log(hoveredRouteIds);
+        hoveredRouteIds.forEach((hoveredRouteId) => {
+          if(mapRef.current){
+            mapRef.current.setFeatureState(
+              {source: 'routes-source', id: hoveredRouteId},
+              { hover: false }
+            );
+          }
+        });
+        setHoveredRouteIds([]);
+      });
+
+      /*
+      mapRef.current.on('click', function(e) {
+        console.log(e.features);
+        //dispatch(setFilter([id]));
+        //console.log(e.features);
+      }); */
+
+    }
+  },[mapRef.current, hoveredRouteIds]);
   
   useEffect(() => {
     if(data?.alerts){
-      const routeData = data.alerts.flatMap((alert: Alert, index: number) => {
+      const features = data.alerts.flatMap((alert: Alert, index: number) => {
         const route: MultiLineString = {
           'type': 'MultiLineString', 
           'coordinates': []
@@ -44,16 +89,27 @@ const DisruptionMap = ({ data }:  Props) => {
             'id': index, //id has to be int
             'geometry': route,
             'properties': {
-              'testi': alert.alertDescriptionText
+              'disruptionId': alert.id,
+              'severity': alert.alertSeverityLevel
             }
         };
-
-        return { id: alert.id, description: alert.alertDescriptionText, severity: alert.alertSeverityLevel, route: feature};
+        return feature;
       });
-      routeData.sort(sortBySeverity);
-      setRouteDisruptions(routeData);
+
+      features.sort(sortBySeverity);
+      const collection: FeatureCollection = {
+        type: 'FeatureCollection',
+        features
+      };
+      setFeatureCollection(collection);
     }
   }, [data]);
+
+
+  const onLoad = (event: MapboxEvent) => {
+    mapRef.current = event.target;
+    setForceRerender(1);
+  };
 
   return (
     <Map
@@ -65,16 +121,13 @@ const DisruptionMap = ({ data }:  Props) => {
       mapStyle={style}
       style={{'width':'50%'}}
       attributionControl={false}
+      onLoad={onLoad}
+    
+      interactiveLayerIds={['routes']}
     >
-
-      {routeDisruptions.length > 0 && 
-        routeDisruptions.map((disruption: RouteDisruption)  => {
-          const routeStyle = getRouteStyle(disruption.id, disruption.severity);
-          if(disruption.route) {
-            return <Route key={disruption.id} id={disruption.id} routeStyle={routeStyle} route={disruption.route} />;
-          }
-        })
-      }
+      <Source type="geojson" data={featureCollection} id={'routes-source'}>
+        <Layer  {...getRouteStyle() as LayerProps}/>
+      </Source>
     </Map>
   );
 };

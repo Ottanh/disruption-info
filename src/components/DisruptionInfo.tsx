@@ -33,7 +33,7 @@ const DisruptionInfo = ({ data, loading, error }: Props) => {
   return (
     <div className="DisruptionInfo">
       {data.alerts.map((alert: Alert) => {
-        if(alert.id === filter || filter === null){
+        if(filter.length === 0 || filter.includes(alert.id)){
           let alerType;
           if(alert.alertSeverityLevel === 'INFO'){
             alerType = 'Alert-info';

@@ -2,11 +2,11 @@ import React, { createContext, useContext, useReducer } from 'react';
 import { Action } from './reducer';
 
 export type State = {
-  filter: string | null
+  filter: string[]
 };
 
 const initialState: State = {
-  filter: null
+  filter: []
 };
 
 export const StateContext = createContext<[State, React.Dispatch<Action>]>([
