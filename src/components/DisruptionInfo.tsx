@@ -3,6 +3,8 @@ import { useStateValue } from '../state';
 import { Alert } from '../types';
 import './DisruptionInfo.css';
 
+import lodash from 'lodash';
+
 interface Props {
   data: {
     alerts: Alert[]
@@ -29,22 +31,51 @@ const DisruptionInfo = ({ data, loading, error }: Props) => {
       </div>
     );
   }
+
+  let alerts = data.alerts.map((alert) => {
+    return { ...alert, route: [alert.route] };
+  });
+
+  alerts = lodash.uniqWith(alerts, (pre, cur) => {
+    if (pre.alertDescriptionText == cur.alertDescriptionText) {
+      cur.route = cur.route.concat(pre.route);
+      return true;
+    }
+    return false;
+  });
   
+  console.log(alerts);
+
+  const renderInfo = () => {
+    return alerts.map((alert) => {
+
+      let filterValue;
+      for(let i = 0; i < filter.length; i++) {
+        for(let j = 0; j < alert.route.length; j++){
+          if(filter[i] === alert.route[j]?.longName){
+            filterValue = true;
+          }
+        }
+      }
+
+      if(filter.length === 0 || filterValue){
+        let alerType;
+        if(alert.alertSeverityLevel === 'INFO'){
+          alerType = 'Alert-info';
+        } else if(alert.alertSeverityLevel === 'WARNING'){
+          alerType = 'Alert-warning';
+        } else {
+          alerType = 'Alert-severe';
+        }
+        return <div className={alerType} key={alert.id} > {alert.alertDescriptionText}</div>;
+      }
+    });
+  };
+
+
   return (
     <div className="DisruptionInfo">
-      {data.alerts.map((alert: Alert) => {
-        if(filter.length === 0 || filter.includes(alert.id)){
-          let alerType;
-          if(alert.alertSeverityLevel === 'INFO'){
-            alerType = 'Alert-info';
-          } else if(alert.alertSeverityLevel === 'WARNING'){
-            alerType = 'Alert-warning';
-          } else {
-            alerType = 'Alert-severe';
-          }
-          return <div className={alerType} key={alert.id} > {alert.alertDescriptionText}</div>;
-        }
-      })}
+      {renderInfo()}
     </div>
   );
   

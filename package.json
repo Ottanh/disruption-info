@@ -15,6 +15,7 @@
     "@types/react-dom": "^18.0.9",
     "graphql": "^16.6.0",
     "hsl-map-style": "github:HSLdevcom/hsl-map-style",
+    "lodash": "^4.17.21",
     "mapbox-gl": "^2.11.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -48,6 +49,7 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.191",
     "@types/mapbox__polyline": "^1.0.2"
   }
 }

@@ -42,6 +42,12 @@ export interface Alert {
     lat: number
     lon: number
   }
+  routes?: {
+    patterns: [{
+      patternGeometry: PatternGeometry
+    }]
+    longName: string;
+  }[]
 }
 
 export interface RouteDisruption {

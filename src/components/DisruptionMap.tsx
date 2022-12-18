@@ -8,7 +8,7 @@ import sortBySeverity from '../utils/sortBySeverity';
 import getRouteStyle from '../utils/getRouteStyle';
 import { Alert } from '../types';
 import { MultiLineString, Feature, FeatureCollection } from 'geojson';
-import { useStateValue } from '../state';
+import { setFilter, useStateValue } from '../state';
 
 if(process.env.REACT_APP_MAPBOX_TOKEN) {
   mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
@@ -46,7 +46,6 @@ const DisruptionMap = ({ data }:  Props) => {
       });
       
       mapRef.current.on('mouseleave', 'routes', function() {
-        console.log(hoveredRouteIds);
         hoveredRouteIds.forEach((hoveredRouteId) => {
           if(mapRef.current){
             mapRef.current.setFeatureState(
@@ -55,15 +54,21 @@ const DisruptionMap = ({ data }:  Props) => {
             );
           }
         });
-        setHoveredRouteIds([]);
       });
 
-      /*
-      mapRef.current.on('click', function(e) {
-        console.log(e.features);
-        //dispatch(setFilter([id]));
-        //console.log(e.features);
-      }); */
+      
+      mapRef.current.on('click', 'routes', function(e) {
+        if(!e.features) return;
+        const ids: string[] = e.features.map((feature) => {
+          return feature.properties?.routeLongName;
+        })
+        console.log(ids);
+        dispatch(setFilter(ids));
+      }); 
+
+      mapRef.current.on('click',  function() {
+        console.log('ss');
+      }); 
 
     }
   },[mapRef.current, hoveredRouteIds]);
@@ -90,6 +95,7 @@ const DisruptionMap = ({ data }:  Props) => {
             'geometry': route,
             'properties': {
               'disruptionId': alert.id,
+              'routeLongName': alert.route.longName,
               'severity': alert.alertSeverityLevel
             }
         };
