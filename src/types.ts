@@ -4,6 +4,7 @@ export interface Paint {
   'line-width': number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   'line-opacity': any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   'line-color'?: any;
 }
 

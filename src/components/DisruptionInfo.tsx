@@ -1,4 +1,5 @@
 import { ApolloError } from '@apollo/client';
+import { useStateValue } from '../state';
 import { Alert } from '../types';
 import './DisruptionInfo.css';
 
@@ -11,6 +12,8 @@ interface Props {
 }
 
 const DisruptionInfo = ({ data, loading, error }: Props) => {
+  const [{ filter }, ] = useStateValue();
+
   if(loading){
     return(
       <div>
@@ -30,15 +33,17 @@ const DisruptionInfo = ({ data, loading, error }: Props) => {
   return (
     <div className="DisruptionInfo">
       {data.alerts.map((alert: Alert) => {
-        let alerType;
-        if(alert.alertSeverityLevel === 'INFO'){
-          alerType = 'Alert-info';
-        } else if(alert.alertSeverityLevel === 'WARNING'){
-          alerType = 'Alert-warning';
-        } else {
-          alerType = 'Alert-severe';
+        if(alert.id === filter || filter === null){
+          let alerType;
+          if(alert.alertSeverityLevel === 'INFO'){
+            alerType = 'Alert-info';
+          } else if(alert.alertSeverityLevel === 'WARNING'){
+            alerType = 'Alert-warning';
+          } else {
+            alerType = 'Alert-severe';
+          }
+          return <div className={alerType} key={alert.id} > {alert.alertDescriptionText}</div>;
         }
-        return <div className={alerType} key={alert.id} > {alert.alertDescriptionText}</div>;
       })}
     </div>
   );

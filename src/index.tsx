@@ -9,6 +9,8 @@ import {
   InMemoryCache,
 } from '@apollo/client';
 
+import { StateProvider, reducer } from './state';
+
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: new HttpLink({
@@ -22,7 +24,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <App />
+      <StateProvider reducer={reducer}>
+        <App />
+      </StateProvider>
     </ApolloProvider>
   </React.StrictMode>
 );
