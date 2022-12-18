@@ -16,7 +16,10 @@ const GET_DISRUPTIONS = gql`
       id
       alertSeverityLevel
       alertDescriptionText
+      effectiveStartDate
+      effectiveEndDate
       route {
+        id
         patterns {
           patternGeometry {
             points
@@ -24,9 +27,6 @@ const GET_DISRUPTIONS = gql`
           }
         }
         longName
-      }
-      trip {
-        shapeId
       }
       stop {
         lat

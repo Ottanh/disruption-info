@@ -29,52 +29,6 @@ const DisruptionMap = ({ data }:  Props) => {
   const [{ filter }, dispatch] = useStateValue();
 
   useEffect(() => {
-    if(mapRef.current){
-      mapRef.current.on('mouseenter', 'routes', function(e) {
-
-        e.features?.forEach((feature: MapboxGeoJSONFeature) => {
-          if(feature.id && !hoveredRouteIds.includes(feature.id.toString())){
-            setHoveredRouteIds(hoveredRouteIds.concat(feature.id.toString()));
-          }
-          if(mapRef.current){
-            mapRef.current.setFeatureState(
-              feature,
-              { hover: true }
-            );
-          }
-        });
-      });
-      
-      mapRef.current.on('mouseleave', 'routes', function() {
-        hoveredRouteIds.forEach((hoveredRouteId) => {
-          if(mapRef.current){
-            mapRef.current.setFeatureState(
-              {source: 'routes-source', id: hoveredRouteId},
-              { hover: false }
-            );
-          }
-        });
-      });
-
-      
-      mapRef.current.on('click', 'routes', function(e) {
-        if(!e.features) return;
-        const ids: string[] = e.features.map((feature) => {
-          return feature.properties?.routeLongName;
-        })
-        dispatch(setFilter(ids));
-      }); 
-
-      mapRef.current.on('click',  function(e) {
-        if(filter.length > 0){
-          dispatch(setFilter([]));
-        }
-      }); 
-
-    }
-  },[mapRef.current, hoveredRouteIds]);
-  
-  useEffect(() => {
     if(data?.alerts){
       const features = data.alerts.flatMap((alert: Alert, index: number) => {
         const route: MultiLineString = {
@@ -112,7 +66,52 @@ const DisruptionMap = ({ data }:  Props) => {
     }
   }, [data]);
 
+  useEffect(() => {
+    if(mapRef.current){
+      mapRef.current.on('mouseenter', 'routes', function(e) {
 
+        e.features?.forEach((feature: MapboxGeoJSONFeature) => {
+          if(feature.id && !hoveredRouteIds.includes(feature.id.toString())){
+            setHoveredRouteIds(hoveredRouteIds.concat(feature.id.toString()));
+          }
+          if(mapRef.current){
+            mapRef.current.setFeatureState(
+              feature,
+              { hover: true }
+            );
+          }
+        });
+      });
+      
+      mapRef.current.on('mouseleave', 'routes', function() {
+        hoveredRouteIds.forEach((hoveredRouteId) => {
+          if(mapRef.current){
+            mapRef.current.setFeatureState(
+              {source: 'routes-source', id: hoveredRouteId},
+              { hover: false }
+            );
+          }
+        });
+      });
+
+      
+      mapRef.current.on('click', 'routes', function(e) {
+        if(!e.features) return;
+        const ids: string[] = e.features.map((feature) => {
+          return feature.properties?.routeLongName;
+        });
+        dispatch(setFilter(ids));
+      }); 
+
+      mapRef.current.on('click',  function() {
+        if(filter.length > 0){
+          dispatch(setFilter([]));
+        }
+      }); 
+
+    }
+  },[mapRef.current, hoveredRouteIds]);
+  
   const onLoad = (event: MapboxEvent) => {
     mapRef.current = event.target;
     setForceRerender(1);

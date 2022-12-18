@@ -29,25 +29,19 @@ export interface Alert {
   id: string;
   alertSeverityLevel: string;
   alertDescriptionText: string;
+  effectiveStartDate: number;
+  effectiveEndDate: number;
   route: {
+    id: string;
     patterns: [{
       patternGeometry: PatternGeometry
     }]
     longName: string;
-  }
-  trip: {
-    shapeId: string;
   }
   stop: {
     lat: number
     lon: number
   }
-  routes?: {
-    patterns: [{
-      patternGeometry: PatternGeometry
-    }]
-    longName: string;
-  }[]
 }
 
 export interface RouteDisruption {

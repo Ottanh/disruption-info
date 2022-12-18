@@ -43,6 +43,7 @@ const DisruptionInfo = ({ data, loading, error }: Props) => {
     }
     return false;
   });
+
   
   const renderInfo = () => {
     return alerts.map((alert) => {
@@ -64,7 +65,28 @@ const DisruptionInfo = ({ data, loading, error }: Props) => {
         } else {
           alerType = 'Alert-severe';
         }
-        return <div className={alerType} key={alert.id} > {alert.alertDescriptionText}</div>;
+
+        const startdate = (new Date(alert.effectiveStartDate * 1000)).toLocaleString();
+        const enddate = (new Date(alert.effectiveEndDate * 1000)).toLocaleString();
+        return (
+        <div className={alerType} key={alert.id} > 
+          <div className="Disruption-time">
+            From {startdate} to {enddate}
+          </div>
+          <div>
+            {alert.alertDescriptionText}
+          </div>
+          <div className="Route-list-container">
+            <span className="Route-list-title">Routes affected</span>
+            <ul className="Route-list">
+            {alert.route.map((route) => {
+              if(route?.longName)
+                return <li key={route.id}>{route.longName}</li>;
+            })}
+            </ul> 
+          </div>
+          
+        </div>);
       }
     });
   };
