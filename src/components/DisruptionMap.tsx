@@ -62,12 +62,13 @@ const DisruptionMap = ({ data }:  Props) => {
         const ids: string[] = e.features.map((feature) => {
           return feature.properties?.routeLongName;
         })
-        console.log(ids);
         dispatch(setFilter(ids));
       }); 
 
-      mapRef.current.on('click',  function() {
-        console.log('ss');
+      mapRef.current.on('click',  function(e) {
+        if(filter.length > 0){
+          dispatch(setFilter([]));
+        }
       }); 
 
     }

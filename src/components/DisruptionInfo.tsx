@@ -44,11 +44,8 @@ const DisruptionInfo = ({ data, loading, error }: Props) => {
     return false;
   });
   
-  console.log(alerts);
-
   const renderInfo = () => {
     return alerts.map((alert) => {
-
       let filterValue;
       for(let i = 0; i < filter.length; i++) {
         for(let j = 0; j < alert.route.length; j++){
@@ -72,13 +69,11 @@ const DisruptionInfo = ({ data, loading, error }: Props) => {
     });
   };
 
-
   return (
     <div className="DisruptionInfo">
       {renderInfo()}
     </div>
   );
-  
 };
 
 export default DisruptionInfo;
