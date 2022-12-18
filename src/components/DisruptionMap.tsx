@@ -6,9 +6,9 @@ import { useEffect, useState } from 'react';
 import polyline from '@mapbox/polyline';
 import Route from './Route';
 import sortBySeverity from '../utils/sortBySeverity';
-import getLayerStyle from '../utils/getLayerStyle';
+import getRouteStyle from '../utils/getRouteStyle';
 import { Alert, RouteDisruption } from '../types';
-import { MultiLineString } from 'geojson';
+import { MultiLineString, Feature } from 'geojson';
 
 if(process.env.REACT_APP_MAPBOX_TOKEN) {
   mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
@@ -22,10 +22,10 @@ interface Props {
 
 const DisruptionMap = ({ data }:  Props) => {
   const [routeDisruptions, setRouteDisruptions] = useState<RouteDisruption[]>([]);
-
+  
   useEffect(() => {
     if(data?.alerts){
-      const routeData = data.alerts.flatMap((alert: Alert) => {
+      const routeData = data.alerts.flatMap((alert: Alert, index: number) => {
         const route: MultiLineString = {
           'type': 'MultiLineString', 
           'coordinates': []
@@ -39,13 +39,21 @@ const DisruptionMap = ({ data }:  Props) => {
         });
         route.coordinates = lines;
 
-        return { id: alert.id, description: alert.alertDescriptionText, severity: alert.alertSeverityLevel, route };
+        const feature: Feature = {
+            'type': 'Feature',
+            'id': index, //id has to be int
+            'geometry': route,
+            'properties': {
+              'testi': alert.alertDescriptionText
+            }
+        };
+
+        return { id: alert.id, description: alert.alertDescriptionText, severity: alert.alertSeverityLevel, route: feature};
       });
       routeData.sort(sortBySeverity);
       setRouteDisruptions(routeData);
     }
   }, [data]);
-
 
   return (
     <Map
@@ -61,9 +69,9 @@ const DisruptionMap = ({ data }:  Props) => {
 
       {routeDisruptions.length > 0 && 
         routeDisruptions.map((disruption: RouteDisruption)  => {
-          const layerStyle = getLayerStyle(disruption.id, disruption.severity);
+          const routeStyle = getRouteStyle(disruption.id, disruption.severity);
           if(disruption.route) {
-            return <Route key={disruption.id} layerStyle={layerStyle} route={disruption.route} />;
+            return <Route key={disruption.id} id={disruption.id} routeStyle={routeStyle} route={disruption.route} />;
           }
         })
       }

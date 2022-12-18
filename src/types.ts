@@ -1,9 +1,10 @@
-import { LineString, MultiLineString } from 'geojson';
+import { FeatureCollection, Feature } from 'geojson';
 
 export interface Paint {
   'line-width': number;
-  'line-opacity': number;
-  'line-color'?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  'line-opacity': any;
+  'line-color'?: any;
 }
 
 export interface Layout {
@@ -11,7 +12,7 @@ export interface Layout {
   'line-cap': string;
 }
 
-export interface LayerStyle {
+export interface RouteStyle {
   id: string;
   type: string;
   layout: Layout;
@@ -46,5 +47,5 @@ export interface RouteDisruption {
   id: string;
   description: string;
   severity: string;
-  route: MultiLineString;
+  route: Feature | FeatureCollection;
 }
