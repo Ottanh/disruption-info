@@ -8,8 +8,7 @@ import Route from './Route';
 import sortBySeverity from '../utils/sortBySeverity';
 import getLayerStyle from '../utils/getLayerStyle';
 import { Alert, RouteDisruption } from '../types';
-import { LineString } from 'geojson';
-
+import { MultiLineString } from 'geojson';
 
 if(process.env.REACT_APP_MAPBOX_TOKEN) {
   mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
@@ -27,15 +26,21 @@ const DisruptionMap = ({ data }:  Props) => {
   useEffect(() => {
     if(data?.alerts){
       const routeData = data.alerts.flatMap((alert: Alert) => {
+        const route: MultiLineString = {
+          'type': 'MultiLineString', 
+          'coordinates': []
+        };
         if(!alert.route?.patterns) return [];
         
-        const lines = alert.route.patterns.map((pattern: { patternGeometry: { points: string; }; }) => {
-          return polyline.toGeoJSON(pattern.patternGeometry.points);
+        const lines = alert.route.patterns.map((pattern) => {
+          const line = polyline.decode(pattern.patternGeometry.points);
+          line.forEach(coordinates => coordinates.reverse());
+          return line;
         });
+        route.coordinates = lines;
 
-        return { id: alert.id, description: alert.alertDescriptionText, severity: alert.alertSeverityLevel, lines };
+        return { id: alert.id, description: alert.alertDescriptionText, severity: alert.alertSeverityLevel, route };
       });
-      console.log(routeData);
       routeData.sort(sortBySeverity);
       setRouteDisruptions(routeData);
     }
@@ -56,10 +61,10 @@ const DisruptionMap = ({ data }:  Props) => {
 
       {routeDisruptions.length > 0 && 
         routeDisruptions.map((disruption: RouteDisruption)  => {
-          return disruption.lines.map((line: LineString, index: number) => {
-            const layerStyle = getLayerStyle(disruption.id + index, disruption.severity);
-            return <Route key={index} layerStyle={layerStyle} line={line} />;
-          });
+          const layerStyle = getLayerStyle(disruption.id, disruption.severity);
+          if(disruption.route) {
+            return <Route key={disruption.id} layerStyle={layerStyle} route={disruption.route} />;
+          }
         })
       }
     </Map>

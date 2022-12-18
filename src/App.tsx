@@ -5,6 +5,7 @@ import DisruptionMap from './components/DisruptionMap';
 import { gql, useQuery } from '@apollo/client';
 import Header from './components/Header';
 
+
 if(process.env.REACT_APP_MAPBOX_TOKEN) {
   mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 }
@@ -37,6 +38,9 @@ const GET_DISRUPTIONS = gql`
 
 const App = () => {
   const { data, loading, error} = useQuery(GET_DISRUPTIONS);
+
+  
+
   return (
     <div className="App">
       <div className="Info-container">

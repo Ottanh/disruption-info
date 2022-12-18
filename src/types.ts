@@ -1,4 +1,4 @@
-import { LineString } from 'geojson';
+import { LineString, MultiLineString } from 'geojson';
 
 export interface Paint {
   'line-width': number;
@@ -18,16 +18,18 @@ export interface LayerStyle {
   paint: Paint;
 }
 
+export interface PatternGeometry {
+  points: string;
+  length: number;
+}
+
 export interface Alert {
   id: string;
   alertSeverityLevel: string;
   alertDescriptionText: string;
   route: {
     patterns: [{
-      patternGeometry: {
-        points: string;
-        length: number;
-      }
+      patternGeometry: PatternGeometry
     }]
     longName: string;
   }
@@ -44,5 +46,5 @@ export interface RouteDisruption {
   id: string;
   description: string;
   severity: string;
-  lines: LineString[];
+  route: MultiLineString;
 }
