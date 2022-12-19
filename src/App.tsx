@@ -1,7 +1,7 @@
 import './App.css';
 import mapboxgl from 'mapbox-gl';
-import DisruptionInfo from './components/DisruptionInfo';
-import DisruptionMap from './components/DisruptionMap';
+import DisruptionInfo from './components/AlertList';
+import DisruptionMap from './components/Map';
 import { gql, useQuery } from '@apollo/client';
 import Header from './components/Header';
 import { setAlerts, useStateValue } from './state';

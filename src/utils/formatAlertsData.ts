@@ -1,12 +1,12 @@
 import polyline from '@mapbox/polyline';
 import lodash from 'lodash';
-import { Alert } from '../types';
+import { AlertType } from '../types';
 import { Feature, FeatureCollection } from 'geojson';
 import sortBySeverity from './sortBySeverity';
 
 
-export const mergeAlerts = (alerts: Alert[]) => {
-  let alertsCombined = alerts.map((alert: Alert) => {
+export const mergeAlerts = (alerts: AlertType[]) => {
+  let alertsCombined = alerts.map((alert: AlertType) => {
     return { ...alert, route: [alert.route] };
   });
 
@@ -22,8 +22,8 @@ export const mergeAlerts = (alerts: Alert[]) => {
   return alertsCombined;
 };
 
-export const getFeatureCollection = (alerts: Alert[]) => {
-  const features = alerts.flatMap((alert: Alert, index: number) => {
+export const getFeatureCollection = (alerts: AlertType[]) => {
+  const features = alerts.flatMap((alert: AlertType, index: number) => {
     if(!alert.route?.patterns) return [];  //return if route has no geopatterns
 
     const polylines = alert.route.patterns.map((pattern) => {

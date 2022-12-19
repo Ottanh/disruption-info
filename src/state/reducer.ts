@@ -1,4 +1,4 @@
-import { Alert } from '../types';
+import { AlertType } from '../types';
 import { State } from './state';
 
 export type Action =
@@ -8,7 +8,7 @@ export type Action =
     }
   | {
       type: 'SET_ALERT';
-      payload: Alert[];
+      payload: AlertType[];
     }
   | {
       type: 'SET_STATE';
@@ -41,7 +41,7 @@ export const setFilter = (payload: string[]): Action => {
   };
 };
 
-export const setAlerts = (payload: Alert[]): Action => {
+export const setAlerts = (payload: AlertType[]): Action => {
   return {
     type: 'SET_ALERT',
     payload

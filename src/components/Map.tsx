@@ -1,7 +1,7 @@
 import Map, { Layer, LayerProps, Source } from 'react-map-gl';
 import mapboxgl, { MapboxEvent, Map as MapType, MapboxGeoJSONFeature } from 'mapbox-gl';
 import style from '../hsl-map-style';
-import './DisruptionMap.css';
+import './Map.css';
 import { useEffect, useRef, useState } from 'react';
 import getRouteStyle from '../utils/getRouteStyle';
 import { FeatureCollection } from 'geojson';
@@ -18,6 +18,7 @@ const DisruptionMap = () => {
   const [, setForceRerender] = useState(0);
   const [hoveredRouteIds, setHoveredRouteIds] = useState<string[]>([]);
   const [{ filter, alerts }, dispatch] = useStateValue();
+
 
   useEffect(() => {
     if(alerts){

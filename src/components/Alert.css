@@ -1,11 +1,3 @@
-.DisruptionInfo {
-  padding: 3rem;
-  padding-top: 1rem;
-  box-sizing: border-box;
-  background-color: rgb(18, 18, 18);
-  min-height: 85%;
-}
-
 .Route-list {
   column-count: 2;
 }

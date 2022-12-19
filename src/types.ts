@@ -25,7 +25,7 @@ export interface PatternGeometry {
   length: number;
 }
 
-interface Route {
+export interface Route {
   id: string;
   patterns: [{
     patternGeometry: PatternGeometry
@@ -33,7 +33,7 @@ interface Route {
   longName: string;
 }
 
-export interface Alert {
+export interface AlertType {
   id: string;
   alertSeverityLevel: string;
   alertDescriptionText: string;

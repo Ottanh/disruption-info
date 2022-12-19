@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+// INFO < WARNING < SEVERE
 const sortBySeverity = (a: any, b: any ) => {
   if(a.properties.severity === 'INFO' && b.properties.severity === 'WARNING' || a.properties.severity === 'WARNING' && b.properties.severity === 'SEVERE' ){
     return -1;
