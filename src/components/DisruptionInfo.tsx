@@ -1,23 +1,10 @@
 import { useStateValue } from '../state';
 import './DisruptionInfo.css';
-
-import lodash from 'lodash';
-
+import { mergeAlerts } from '../utils/formatAlertsData';
 
 const DisruptionInfo = () => {
   const [{ filter, alerts },] = useStateValue();
-
-  let alertsCombined = alerts.map((alert) => {
-    return { ...alert, route: [alert.route] };
-  });
-
-  alertsCombined = lodash.uniqWith(alertsCombined, (pre, cur) => {
-    if (pre.alertDescriptionText == cur.alertDescriptionText) {
-      cur.route = cur.route.concat(pre.route);
-      return true;
-    }
-    return false;
-  });
+  const alertsCombined = mergeAlerts(alerts);
   
   const renderInfo = () => {
     return alertsCombined.map((alert) => {

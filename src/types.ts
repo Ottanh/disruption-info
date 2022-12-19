@@ -25,19 +25,21 @@ export interface PatternGeometry {
   length: number;
 }
 
+interface Route {
+  id: string;
+  patterns: [{
+    patternGeometry: PatternGeometry
+  }]
+  longName: string;
+}
+
 export interface Alert {
   id: string;
   alertSeverityLevel: string;
   alertDescriptionText: string;
   effectiveStartDate: number;
   effectiveEndDate: number;
-  route: {
-    id: string;
-    patterns: [{
-      patternGeometry: PatternGeometry
-    }]
-    longName: string;
-  }
+  route: Route
   stop: {
     lat: number
     lon: number

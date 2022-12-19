@@ -3,12 +3,10 @@ import mapboxgl, { MapboxEvent, Map as MapType, MapboxGeoJSONFeature } from 'map
 import style from '../hsl-map-style';
 import './DisruptionMap.css';
 import { useEffect, useRef, useState } from 'react';
-import polyline from '@mapbox/polyline';
-import sortBySeverity from '../utils/sortBySeverity';
 import getRouteStyle from '../utils/getRouteStyle';
-import { Alert } from '../types';
-import { MultiLineString, Feature, FeatureCollection } from 'geojson';
+import { FeatureCollection } from 'geojson';
 import { setFilter, useStateValue } from '../state';
+import { getFeatureCollection } from '../utils/formatAlertsData';
 
 if(process.env.REACT_APP_MAPBOX_TOKEN) {
   mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
@@ -23,39 +21,7 @@ const DisruptionMap = () => {
 
   useEffect(() => {
     if(alerts){
-      const features = alerts.flatMap((alert: Alert, index: number) => {
-        const route: MultiLineString = {
-          'type': 'MultiLineString', 
-          'coordinates': []
-        };
-        if(!alert.route?.patterns) return [];
-        
-        const lines = alert.route.patterns.map((pattern) => {
-          const line = polyline.decode(pattern.patternGeometry.points);
-          line.forEach(coordinates => coordinates.reverse());
-          return line;
-        });
-        route.coordinates = lines;
-
-        const feature: Feature = {
-            'type': 'Feature',
-            'id': index, //id has to be int
-            'geometry': route,
-            'properties': {
-              'disruptionId': alert.id,
-              'routeLongName': alert.route.longName,
-              'severity': alert.alertSeverityLevel
-            }
-        };
-        return feature;
-      });
-
-      features.sort(sortBySeverity);
-      const collection: FeatureCollection = {
-        type: 'FeatureCollection',
-        features
-      };
-      setFeatureCollection(collection);
+      setFeatureCollection(getFeatureCollection(alerts));
     }
   }, [alerts]);
 

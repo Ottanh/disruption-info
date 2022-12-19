@@ -42,13 +42,11 @@ const App = () => {
   const { data, error} = useQuery(GET_DISRUPTIONS);
   const [, dispatch] = useStateValue();
 
-
   useEffect(() => {
     if(data){
       dispatch(setAlerts(data.alerts));
     }
   }, [data]);
-
   
   if(error){
     return (
