@@ -1,15 +1,10 @@
 import './App.css';
-import mapboxgl from 'mapbox-gl';
 import DisruptionInfo from './components/AlertList';
 import DisruptionMap from './components/Map';
 import { gql, useQuery } from '@apollo/client';
 import Header from './components/Header';
 import { setAlerts, useStateValue } from './state';
 import { useEffect } from 'react';
-
-if(process.env.REACT_APP_MAPBOX_TOKEN) {
-  mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
-}
 
 const GET_DISRUPTIONS = gql`
   query {
@@ -40,7 +35,6 @@ const GET_DISRUPTIONS = gql`
 const App = () => {
   const { data, error} = useQuery(GET_DISRUPTIONS);
   const [, dispatch] = useStateValue();
-
 
   useEffect(() => {
     if(data){

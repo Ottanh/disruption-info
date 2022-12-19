@@ -1,5 +1,5 @@
 import Map, { Layer, LayerProps, Source } from 'react-map-gl';
-import mapboxgl, { MapboxEvent, Map as MapType, MapboxGeoJSONFeature } from 'mapbox-gl';
+import { MapboxEvent, Map as MapType, MapboxGeoJSONFeature } from 'mapbox-gl';
 import './Map.css';
 import { useEffect, useRef, useState } from 'react';
 import getRouteStyle from '../utils/getRouteStyle';
@@ -7,9 +7,6 @@ import { FeatureCollection } from 'geojson';
 import { setFilter, useStateValue } from '../state';
 import { getFeatureCollection } from '../utils/formatAlertsData';
 
-if(process.env.REACT_APP_MAPBOX_TOKEN) {
-  mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
-}
 
 const DisruptionMap = () => {
   const mapRef = useRef<MapType>();
@@ -17,7 +14,6 @@ const DisruptionMap = () => {
   const [, setForceRerender] = useState(0);
   const [hoveredRouteIds, setHoveredRouteIds] = useState<string[]>([]);
   const [{ filter, alerts, mapstyle }, dispatch] = useStateValue();
-
 
   useEffect(() => {
     if(alerts){
@@ -28,7 +24,6 @@ const DisruptionMap = () => {
   useEffect(() => {
     if(mapRef.current){
       mapRef.current.on('mouseenter', 'routes', function(e) {
-
         e.features?.forEach((feature: MapboxGeoJSONFeature) => {
           if(feature.id && !hoveredRouteIds.includes(feature.id.toString())){
             setHoveredRouteIds(hoveredRouteIds.concat(feature.id.toString()));
@@ -53,7 +48,6 @@ const DisruptionMap = () => {
         });
         setHoveredRouteIds([]);
       });
-
       
       mapRef.current.on('click', 'routes', function(e) {
         if(!e.features) return;
@@ -64,7 +58,7 @@ const DisruptionMap = () => {
       }); 
 
       mapRef.current.on('click',  function() {
-        if(filter.length > 0){
+        if(filter.length > 0 && hoveredRouteIds.length === 0){
           dispatch(setFilter([]));
         }
       }); 
@@ -89,8 +83,8 @@ const DisruptionMap = () => {
       style={{'width':'50%'}}
       attributionControl={false}
       onLoad={onLoad}
-    
       interactiveLayerIds={['routes']}
+      mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
     >
       <Source type="geojson" data={featureCollection} id={'routes-source'}>
         <Layer  {...getRouteStyle() as LayerProps}/>
