@@ -1,0 +1,9 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /hsl
+hooks:
+  ApplicationStart:
+    - location: scripts/ApplicationStartHook.sh
+      timeout: 300
