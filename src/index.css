@@ -6,9 +6,30 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: 1.1em;
 }
 
 #root {
   height: 100%;
+}
+
+body.darkTheme {
+  --bg-color: rgb(18, 18, 18);
+  --title-color: rgb(229,229,229);
+  --info: rgba(34, 159, 255, 1);
+  --info-hover: rgba(73, 176, 255, 1);
+  --warning: rgba(255, 255, 71, 1);
+  --warning-hover: rgba(255, 255, 110, 1);
+  --severe: rgba(255, 44, 64, 1);
+  --severe-hover: rgba(255, 103, 117, 1);
+}
+
+body.lightTheme {
+  --bg-color: rgb(229,229,229);
+  --title-color: rgb(18, 18, 18);
+  --info: rgba(73, 176, 255, 1);
+  --info-hover: rgba(34, 159, 255, 1); 
+  --warning: rgba(255, 255, 110, 1);
+  --warning-hover: rgba(255, 255, 71, 1);
+  --severe: rgba(255, 103, 117, 1);
+  --severe-hover: rgba(255, 44, 64, 1);
 }

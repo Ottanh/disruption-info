@@ -1,2 +1,1 @@
-
-declare module '@mapbox/geojson-merge';
+declare module 'hsl-map-style'

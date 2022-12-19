@@ -22,25 +22,25 @@
 }
 
 .Alert-info {
-  background-color: rgba(34,159,255, 0.5);
+  background-color: var(--info);
 }
 
 .Alert-warning {
-  background-color: rgba(255,255,110,0.5);
+  background-color: var(--warning);
 }
 
 .Alert-severe {
-  background-color: rgba(255,27,48,0.5);
+  background-color: var(--severe);
 }
 
 .Alert-info:hover {
-  background-color: rgba(34,159,255, 0.8);
+  background-color: var(--info-hover)
 }
 
 .Alert-warning:hover {
-  background-color: rgba(255,255,110,0.8);
+  background-color: var(--warning-hover)
 }
 
 .Alert-severe:hover {
-  background-color: rgba(255,27,48,0.8);
+  background-color: var(--severe-hover)
 }

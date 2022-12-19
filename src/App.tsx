@@ -7,7 +7,6 @@ import Header from './components/Header';
 import { setAlerts, useStateValue } from './state';
 import { useEffect } from 'react';
 
-
 if(process.env.REACT_APP_MAPBOX_TOKEN) {
   mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 }
@@ -42,10 +41,12 @@ const App = () => {
   const { data, error} = useQuery(GET_DISRUPTIONS);
   const [, dispatch] = useStateValue();
 
+
   useEffect(() => {
     if(data){
       dispatch(setAlerts(data.alerts));
     }
+    console.log(document.documentElement);
   }, [data]);
   
   if(error){

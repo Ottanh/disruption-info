@@ -1,15 +1,19 @@
+import { Style } from 'mapbox-gl';
 import React, { createContext, useContext, useReducer } from 'react';
+import { darkStyle } from '../hsl-map-style';
 import { AlertType } from '../types';
 import { Action } from './reducer';
 
 export type State = {
   filter: string[],
   alerts: AlertType[],
+  mapstyle: Style
 };
 
 const initialState: State = {
   filter: [],
-  alerts: []
+  alerts: [],
+  mapstyle: darkStyle
 };
 
 export const StateContext = createContext<[State, React.Dispatch<Action>]>([

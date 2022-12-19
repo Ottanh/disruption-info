@@ -10,6 +10,8 @@ import {
 } from '@apollo/client';
 
 import { StateProvider, reducer } from './state';
+import { MapProvider } from 'react-map-gl';
+import { setDarkTheme } from './utils/theme';
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
@@ -21,11 +23,16 @@ const client = new ApolloClient({
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+setDarkTheme();
+
 root.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
       <StateProvider reducer={reducer}>
-        <App />
+        <MapProvider>
+          <App />
+        </MapProvider>
       </StateProvider>
     </ApolloProvider>
   </React.StrictMode>

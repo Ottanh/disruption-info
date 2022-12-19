@@ -1,3 +1,4 @@
+import { Style } from 'mapbox-gl';
 import { AlertType } from '../types';
 import { State } from './state';
 
@@ -11,6 +12,11 @@ export type Action =
       payload: AlertType[];
     }
   | {
+    type: 'SET_STYLE';
+    payload: Style;
+    }
+  |
+    {
       type: 'SET_STATE';
       payload: State;
     }
@@ -29,6 +35,11 @@ export const reducer = (state: State, action: Action): State => {
         ...state,
         alerts: action.payload
       };
+    case 'SET_STYLE':
+      return {
+        ...state,
+        mapstyle: action.payload
+      };
     default:
       return state;
   }
@@ -44,6 +55,13 @@ export const setFilter = (payload: string[]): Action => {
 export const setAlerts = (payload: AlertType[]): Action => {
   return {
     type: 'SET_ALERT',
+    payload
+  };
+};
+
+export const setMapStyle = (payload: Style): Action => {
+  return {
+    type: 'SET_STYLE',
     payload
   };
 };

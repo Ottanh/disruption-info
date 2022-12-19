@@ -1,6 +1,5 @@
 import Map, { Layer, LayerProps, Source } from 'react-map-gl';
 import mapboxgl, { MapboxEvent, Map as MapType, MapboxGeoJSONFeature } from 'mapbox-gl';
-import style from '../hsl-map-style';
 import './Map.css';
 import { useEffect, useRef, useState } from 'react';
 import getRouteStyle from '../utils/getRouteStyle';
@@ -17,7 +16,7 @@ const DisruptionMap = () => {
   const [featureCollection, setFeatureCollection] = useState<FeatureCollection>();
   const [, setForceRerender] = useState(0);
   const [hoveredRouteIds, setHoveredRouteIds] = useState<string[]>([]);
-  const [{ filter, alerts }, dispatch] = useStateValue();
+  const [{ filter, alerts, mapstyle }, dispatch] = useStateValue();
 
 
   useEffect(() => {
@@ -80,12 +79,13 @@ const DisruptionMap = () => {
 
   return (
     <Map
+      id="map"
       initialViewState={{
         longitude: 24.92399127219203,
         latitude: 60.20098737761848,
         zoom: 10
       }}
-      mapStyle={style}
+      mapStyle={mapstyle}
       style={{'width':'50%'}}
       attributionControl={false}
       onLoad={onLoad}

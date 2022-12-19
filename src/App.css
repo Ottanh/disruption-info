@@ -1,6 +1,8 @@
 .App {
   height: 100%;
   display: flex;
+  font-size: 1.2em;
+  background-color: var(--bg-color);
 }
 
 .Info-container {
