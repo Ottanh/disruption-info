@@ -1,12 +1,15 @@
 import React, { createContext, useContext, useReducer } from 'react';
+import { Alert } from '../types';
 import { Action } from './reducer';
 
 export type State = {
-  filter: string[]
+  filter: string[],
+  alerts: Alert[],
 };
 
 const initialState: State = {
-  filter: []
+  filter: [],
+  alerts: []
 };
 
 export const StateContext = createContext<[State, React.Dispatch<Action>]>([

@@ -4,6 +4,8 @@ import DisruptionInfo from './components/DisruptionInfo';
 import DisruptionMap from './components/DisruptionMap';
 import { gql, useQuery } from '@apollo/client';
 import Header from './components/Header';
+import { setAlerts, useStateValue } from './state';
+import { useEffect } from 'react';
 
 
 if(process.env.REACT_APP_MAPBOX_TOKEN) {
@@ -37,17 +39,32 @@ const GET_DISRUPTIONS = gql`
 `;
 
 const App = () => {
-  const { data, loading, error} = useQuery(GET_DISRUPTIONS);
+  const { data, error} = useQuery(GET_DISRUPTIONS);
+  const [, dispatch] = useStateValue();
+
+
+  useEffect(() => {
+    if(data){
+      dispatch(setAlerts(data.alerts));
+    }
+  }, [data]);
 
   
+  if(error){
+    return (
+      <div className="App">
+        {error.message}
+      </div>
+    );
+  }
 
   return (
     <div className="App">
       <div className="Info-container">
         <Header />
-        <DisruptionInfo data={data} loading={loading} error={error} />
+        <DisruptionInfo  />
       </div>
-      <DisruptionMap data={data} />
+      <DisruptionMap />
     </div>
   );
 };

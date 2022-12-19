@@ -1,52 +1,26 @@
-import { ApolloError } from '@apollo/client';
 import { useStateValue } from '../state';
-import { Alert } from '../types';
 import './DisruptionInfo.css';
 
 import lodash from 'lodash';
 
-interface Props {
-  data: {
-    alerts: Alert[]
-  };
-  loading: boolean;
-  error?: ApolloError;
-}
 
-const DisruptionInfo = ({ data, loading, error }: Props) => {
-  const [{ filter }, ] = useStateValue();
+const DisruptionInfo = () => {
+  const [{ filter, alerts },] = useStateValue();
 
-  if(loading){
-    return(
-      <div>
-        Loading...
-      </div>
-    );
-  }
-
-  if(error){
-    return(
-      <div>
-        {error.message}
-      </div>
-    );
-  }
-
-  let alerts = data.alerts.map((alert) => {
+  let alertsCombined = alerts.map((alert) => {
     return { ...alert, route: [alert.route] };
   });
 
-  alerts = lodash.uniqWith(alerts, (pre, cur) => {
+  alertsCombined = lodash.uniqWith(alertsCombined, (pre, cur) => {
     if (pre.alertDescriptionText == cur.alertDescriptionText) {
       cur.route = cur.route.concat(pre.route);
       return true;
     }
     return false;
   });
-
   
   const renderInfo = () => {
-    return alerts.map((alert) => {
+    return alertsCombined.map((alert) => {
       let filterValue;
       for(let i = 0; i < filter.length; i++) {
         for(let j = 0; j < alert.route.length; j++){

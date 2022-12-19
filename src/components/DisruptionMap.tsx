@@ -14,23 +14,16 @@ if(process.env.REACT_APP_MAPBOX_TOKEN) {
   mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 }
 
-interface Props {
-  data: {
-    alerts: Alert[]
-  }
-}
-
-const DisruptionMap = ({ data }:  Props) => {
-  const [featureCollection, setFeatureCollection] = useState<FeatureCollection>();
+const DisruptionMap = () => {
   const mapRef = useRef<MapType>();
+  const [featureCollection, setFeatureCollection] = useState<FeatureCollection>();
   const [, setForceRerender] = useState(0);
-
   const [hoveredRouteIds, setHoveredRouteIds] = useState<string[]>([]);
-  const [{ filter }, dispatch] = useStateValue();
+  const [{ filter, alerts }, dispatch] = useStateValue();
 
   useEffect(() => {
-    if(data?.alerts){
-      const features = data.alerts.flatMap((alert: Alert, index: number) => {
+    if(alerts){
+      const features = alerts.flatMap((alert: Alert, index: number) => {
         const route: MultiLineString = {
           'type': 'MultiLineString', 
           'coordinates': []
@@ -64,7 +57,7 @@ const DisruptionMap = ({ data }:  Props) => {
       };
       setFeatureCollection(collection);
     }
-  }, [data]);
+  }, [alerts]);
 
   useEffect(() => {
     if(mapRef.current){
@@ -92,6 +85,7 @@ const DisruptionMap = ({ data }:  Props) => {
             );
           }
         });
+        setHoveredRouteIds([]);
       });
 
       

@@ -1,9 +1,14 @@
+import { Alert } from '../types';
 import { State } from './state';
 
 export type Action =
   | {
       type: 'SET_FILTER';
       payload: string[];
+    }
+  | {
+      type: 'SET_ALERT';
+      payload: Alert[];
     }
   | {
       type: 'SET_STATE';
@@ -19,6 +24,11 @@ export const reducer = (state: State, action: Action): State => {
         ...state,
         filter: action.payload
       };
+    case 'SET_ALERT':
+      return {
+        ...state,
+        alerts: action.payload
+      };
     default:
       return state;
   }
@@ -27,6 +37,13 @@ export const reducer = (state: State, action: Action): State => {
 export const setFilter = (payload: string[]): Action => {
   return {
     type: 'SET_FILTER',
+    payload
+  };
+};
+
+export const setAlerts = (payload: Alert[]): Action => {
+  return {
+    type: 'SET_ALERT',
     payload
   };
 };
